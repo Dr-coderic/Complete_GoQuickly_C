@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+<section>
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded shadow">
+        <h2 class="text-2xl font-bold mb-6 text-center">User Management</h2>
+        <table th:if="${users != null && users.size() > 0}" class="w-full table-auto border">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="p-2 border">Name</th>
+                    <th class="p-2 border">Email</th>
+                    <th class="p-2 border">Role</th>
+                    <th class="p-2 border">Status</th>
+                    <th class="p-2 border">Car Owner Approved</th>
+                    <th class="p-2 border">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td class="p-2 border" th:text="${user.firstName + ' ' + user.lastName}"></td>
+                    <td class="p-2 border" th:text="${user.email}"></td>
+                    <td class="p-2 border" th:text="${user.role}"></td>
+                    <td class="p-2 border">
+                        <span th:text="${user.enabled ? 'Enabled' : 'Disabled'}" th:classappend="${user.enabled} ? 'text-green-600' : 'text-red-600'"></span>
+                    </td>
+                    <td class="p-2 border" th:text="${user.hasCar ? (user.approved ? 'Approved' : 'Pending') : '-'}"></td>
+                    <td class="p-2 border">
+                        <form th:action="@{/admin/users/{id}/toggle(id=${user.id})}" method="post" style="display:inline">
+                            <button type="submit" th:text="${user.enabled ? 'Disable' : 'Enable'}" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"></button>
+                        </form>
+                        <form th:if="${user.hasCar && !user.approved}" th:action="@{/admin/users/{id}/approve(id=${user.id})}" method="post" style="display:inline">
+                            <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 ml-2">Approve Car Owner</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div th:if="${users == null || users.size() == 0}" class="text-gray-600">No users found.</div>
+    </div>
+</section>
+</html> 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+<section>
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded shadow">
+        <h2 class="text-2xl font-bold mb-6 text-center">My Vehicles</h2>
+        <h3 class="text-xl font-semibold mb-4">Add New Vehicle</h3>
+        <form th:action="@{/vehicles}" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div>
+                <label for="make" class="block mb-1 font-semibold">Make</label>
+                <input type="text" id="make" name="make" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div>
+                <label for="model" class="block mb-1 font-semibold">Model</label>
+                <input type="text" id="model" name="model" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div>
+                <label for="year" class="block mb-1 font-semibold">Year</label>
+                <input type="number" id="year" name="year" class="w-full border rounded px-3 py-2" min="1900" max="2100" required>
+            </div>
+            <div>
+                <label for="licensePlate" class="block mb-1 font-semibold">License Plate</label>
+                <input type="text" id="licensePlate" name="licensePlate" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div>
+                <label for="capacity" class="block mb-1 font-semibold">Capacity</label>
+                <input type="number" id="capacity" name="capacity" class="w-full border rounded px-3 py-2" min="1" required>
+            </div>
+            <div class="md:col-span-2 text-center">
+                <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700">Add Vehicle</button>
+            </div>
+        </form>
+        <h3 class="text-xl font-semibold mb-4">My Vehicles</h3>
+        <table th:if="${vehicles != null && vehicles.size() > 0}" class="w-full table-auto border">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="p-2 border">Make</th>
+                    <th class="p-2 border">Model</th>
+                    <th class="p-2 border">Year</th>
+                    <th class="p-2 border">License Plate</th>
+                    <th class="p-2 border">Capacity</th>
+                    <th class="p-2 border">Verification Status</th>
+                    <th class="p-2 border">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="vehicle : ${vehicles}">
+                    <td class="p-2 border" th:text="${vehicle.make}"></td>
+                    <td class="p-2 border" th:text="${vehicle.model}"></td>
+                    <td class="p-2 border" th:text="${vehicle.year}"></td>
+                    <td class="p-2 border" th:text="${vehicle.licensePlate}"></td>
+                    <td class="p-2 border" th:text="${vehicle.capacity}"></td>
+                    <td class="p-2 border" th:text="${vehicle.verificationStatus}"></td>
+                    <td class="p-2 border">
+                        <form th:action="@{/vehicles/{id}/toggle(id=${vehicle.id})}" method="post" style="display:inline">
+                            <button type="submit" th:text="${vehicle.enabled ? 'Disable' : 'Enable'}" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"></button>
+                        </form>
+                        <a th:href="@{/vehicles/{id}/documents(id=${vehicle.id})}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 ml-2">Documents</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div th:if="${vehicles == null || vehicles.size() == 0}" class="text-gray-600">No vehicles found.</div>
+    </div>
+</section>
+</html> 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+<section>
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded shadow">
+        <h2 class="text-2xl font-bold mb-6 text-center">Search for Trips</h2>
+        <form th:action="@{/trips/search}" method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div>
+                <label for="from" class="block mb-1 font-semibold">From</label>
+                <input type="text" id="from" name="from" class="w-full border rounded px-3 py-2" th:value="${from}" required>
+            </div>
+            <div>
+                <label for="to" class="block mb-1 font-semibold">To</label>
+                <input type="text" id="to" name="to" class="w-full border rounded px-3 py-2" th:value="${to}" required>
+            </div>
+            <div>
+                <label for="date" class="block mb-1 font-semibold">Date</label>
+                <input type="date" id="date" name="date" class="w-full border rounded px-3 py-2" th:value="${date}" required>
+            </div>
+            <div class="md:col-span-3 text-center">
+                <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700">Search</button>
+            </div>
+        </form>
+        <div th:if="${trips != null}">
+            <h3 class="text-xl font-semibold mb-4">Available Trips</h3>
+            <div th:if="${trips.size() == 0}" class="text-gray-600">No trips found for your search.</div>
+            <table th:if="${trips.size() > 0}" class="w-full table-auto border">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="p-2 border">Route</th>
+                        <th class="p-2 border">Date/Time</th>
+                        <th class="p-2 border">Seats (Segment)</th>
+                        <th class="p-2 border">Price</th>
+                        <th class="p-2 border">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="trip : ${trips}">
+                        <td class="p-2 border">
+                            <span th:text="${trip.startLocation}"></span>
+                            <span th:each="stop : ${#lists.sort(tripStopsMap[trip.id], 'stopOrder')}" th:text="' → ' + ${stop.location}"></span>
+                            <span th:text="' → ' + ${trip.endLocation}"></span>
+                        </td>
+                        <td class="p-2 border" th:text="${#temporals.format(trip.departureTime, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td class="p-2 border" th:text="${segmentSeatsMap[trip.id]}"></td>
+                        <td class="p-2 border" th:text="${trip.price}"></td>
+                        <td class="p-2 border">
+                            <form th:action="@{/trips/bookings}" method="post">
+                                <input type="hidden" name="tripId" th:value="${trip.id}" />
+                                <input type="hidden" name="pickupLocation" th:value="${from}" />
+                                <input type="hidden" name="dropoffLocation" th:value="${to}" />
+                                <input type="number" name="numberOfSeats" min="1" th:attr="max=${segmentSeatsMap[trip.id]}" value="1" class="w-16 border rounded px-2 py-1 mr-2" required />
+                                <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Book</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</html> 

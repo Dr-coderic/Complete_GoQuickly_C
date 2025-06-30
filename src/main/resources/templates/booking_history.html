@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+<section>
+    <div class="max-w-3xl mx-auto bg-white p-8 rounded shadow">
+        <h2 class="text-2xl font-bold mb-6 text-center">My Bookings</h2>
+        <table th:if="${bookings != null && bookings.size() > 0}" class="w-full table-auto border">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="p-2 border">From</th>
+                    <th class="p-2 border">To</th>
+                    <th class="p-2 border">Date/Time</th>
+                    <th class="p-2 border">Seats</th>
+                    <th class="p-2 border">Total Price</th>
+                    <th class="p-2 border">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="booking : ${bookings}">
+                    <td class="p-2 border" th:text="${booking.pickupLocation}"></td>
+                    <td class="p-2 border" th:text="${booking.dropoffLocation}"></td>
+                    <td class="p-2 border" th:text="${#temporals.format(booking.trip.departureTime, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td class="p-2 border" th:text="${booking.numberOfSeats}"></td>
+                    <td class="p-2 border" th:text="${booking.totalPrice}"></td>
+                    <td class="p-2 border" th:text="${booking.status}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div th:if="${bookings == null || bookings.size() == 0}" class="text-gray-600">No bookings found.</div>
+    </div>
+</section>
+</html> 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+<section>
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded shadow">
+        <h2 class="text-2xl font-bold mb-6 text-center">Review Vehicle: <span th:text="${vehicle.make + ' ' + vehicle.model}"></span></h2>
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold">Owner: <span th:text="${vehicle.owner.firstName + ' ' + vehicle.owner.lastName}"></span></h3>
+            <h3 class="text-lg font-semibold">Status: <span th:text="${vehicle.verificationStatus}"></span></h3>
+        </div>
+        <h3 class="text-lg font-semibold mb-2">Uploaded Documents</h3>
+        <ul class="list-disc ml-6 mb-6">
+            <li th:each="doc : ${vehicle.documents}">
+                <a th:href="@{/uploads/{filename}(filename=${doc.documentUrl})}" target="_blank" class="text-blue-600 hover:underline" th:text="${doc.documentType}"></a>
+            </li>
+        </ul>
+        <div class="flex justify-around">
+            <form th:action="@{/admin/vehicles/{id}/verify(id=${vehicle.id})}" method="post">
+                <input type="hidden" name="status" value="VERIFIED">
+                <button type="submit" class="bg-green-600 text-white py-2 px-6 rounded hover:bg-green-700">Approve</button>
+            </form>
+            <form th:action="@{/admin/vehicles/{id}/verify(id=${vehicle.id})}" method="post">
+                <input type="hidden" name="status" value="REJECTED">
+                <button type="submit" class="bg-red-600 text-white py-2 px-6 rounded hover:bg-red-700">Reject</button>
+            </form>
+        </div>
+    </div>
+</section>
+</html> 

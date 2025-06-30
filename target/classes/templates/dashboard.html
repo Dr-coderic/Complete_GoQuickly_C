@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+<section>
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded shadow">
+        <h2 class="text-2xl font-bold mb-6 text-center">Welcome to GoQuicklyC</h2>
+        <div th:if="${role} == 'PASSENGER'">
+            <h3 class="text-xl font-semibold mb-2">Passenger Options</h3>
+            <ul class="list-disc ml-6">
+                <li><a href="/trips/search" class="text-blue-600 hover:underline">Search & Book Trips</a></li>
+                <li><a href="/bookings" class="text-blue-600 hover:underline">My Bookings</a></li>
+            </ul>
+        </div>
+        <div th:if="${role} == 'CAR_OWNER'">
+            <h3 class="text-xl font-semibold mb-2">Car Owner Options</h3>
+            <ul class="list-disc ml-6">
+                <li><a href="/trips/manage" class="text-blue-600 hover:underline">Manage My Trips</a></li>
+                <li><a href="/vehicles" class="text-blue-600 hover:underline">My Vehicles</a></li>
+            </ul>
+        </div>
+        <div th:if="${role} == 'ADMIN'">
+            <h3 class="text-xl font-semibold mb-2">Admin Options</h3>
+            <ul class="list-disc ml-6">
+                <li><a href="/admin/users" class="text-blue-600 hover:underline">User Management</a></li>
+                <li><a href="/admin/car-owners" class="text-blue-600 hover:underline">Car Owner Approvals</a></li>
+            </ul>
+        </div>
+        <div class="mt-8 text-center">
+            <a href="/logout" class="text-red-600 hover:underline">Logout</a>
+        </div>
+    </div>
+</section>
+</html> 
